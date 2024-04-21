@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Parts Store - Магазин</title>
+    <style>
+        header {
+    position: relative;
+}
+
+header img {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 50px; /* Размеры вашего логотипа */
+    width: auto;
+}
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        nav ul li a {
+            color: #000000;
+            text-decoration: none;
+            padding: 14px 16px;
+            transition: background-color 0.3s ease;
+        }
+        nav ul li a:hover {
+            background-color: #555;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        li:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        li h2 {
+            margin-top: 0;
+        }
+        form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        textarea,
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .social-links {
+            margin-top: 10px;
+        }
+        .social-link {
+            display: inline-block;
+            margin-right: 10px;
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .social-link:hover {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="" alt="">
+        <nav>
+            <ul>
+                <li><a href="/">Магазин</a></li>
+                <li><a href="/cart">Корзина</a></li>
+                <% if (userPriority === 2) { %>
+                    <li><a href="/admin">Админ-Панель</a></li>
+                <% } %>
+                <li><a href="/login">Авторизация</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <% if (cornerLetter === 'A') { %>
+            <div style="position: fixed; top: 10px; right: 10px; font-size: 24px;">A</div>
+        <% } %>
+        <h1>Добро пожаловать в магазин компьютерных комплектующих!</h1>
+        <h2>Доступные комплектующие:</h2>
+        <ul>
+            <% products.forEach(product => { %>
+                <li>
+                    <h3><%= product.name %></h3>
+                    <p><%= product.description %></p>
+                    <p>Цена: <%= product.price %> руб.</p>
+                    <form action="/cart" method="post">
+                    <input type="hidden" name="product_id" value="<%= product.id %>">
+                    <input type="number" name="quantity" value="1" min="1">
+                    <button type="submit">Добавить в корзину</button>
+                    </form>
+                </li>
+            <% }); %>
+            <% if (userPriority === 2) { %>
+                <li><a href="/admin/products">Взаимодействовать с продуктами</a></li>
+            <% } %>
+        </ul>
+        <footer class="footer">
+            <div class="footer-content">
+                <p>© 2024 Computer Parts Store</p>
+                <p>Наша компания занимается продажей компьютерных комплектующих.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">Telegram</a>
+                    <a href="#" class="social-link">VKontakte</a>
+                    <!-- Добавьте другие ссылки на социальные сети, если необходимо -->
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
