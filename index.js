@@ -273,6 +273,63 @@ app.post('/admin/products/delete/:productId', isAuthenticated, (req, res) => {
     }
 });
 
+// Роут для отображения зарегистрированных пользователей в админ панели
+app.get('/admin/users', isAuthenticated, (req, res) => {
+    // Проверяем, аутентифицирован ли пользователь и имеет ли он приоритет
+    if (req.session.authenticated && req.session.userPriority === 2) {
+        // Если аутентификация пройдена и пользователь имеет приоритет 2,
+        // получаем информацию о зарегистрированных пользователях из базы данных
+        db.query('SELECT * FROM users', (err, users) => {
+            if (err) {
+                console.error('Error fetching users:', err);
+                return res.status(500).send('Error fetching users');
+            }
+            // Отображаем страницу админ панели с информацией о зарегистрированных пользователях
+            res.render('adminUsers', { users });
+        });
+    } else {
+        // Если пользователь не аутентифицирован или у него нет приоритета 2, перенаправляем на главную страницу
+        res.redirect('/');
+    }
+});
+
+// Роут для смены приоритета пользователя
+app.post('/admin/users/switchPriority/:userId', isAuthenticated, (req, res) => {
+    const userId = req.params.userId;
+    
+    // Проверяем, аутентифицирован ли пользователь и имеет ли он приоритет 2
+    if (req.session.authenticated && req.session.userPriority === 2) {
+        // Получаем текущий приоритет пользователя из базы данных
+        db.query('SELECT priority FROM users WHERE id = ?', [userId], (err, results) => {
+            if (err) {
+                console.error('Error fetching user priority:', err);
+                return res.status(500).send('Error fetching user priority');
+            }
+
+            if (results.length === 0) {
+                return res.status(404).send('User not found');
+            }
+
+            const currentPriority = results[0].priority;
+            const newPriority = currentPriority === 1 ? 2 : 1; // Если текущий приоритет 1, меняем на 2, и наоборот
+
+            // Обновляем приоритет пользователя в базе данных
+            db.query('UPDATE users SET priority = ? WHERE id = ?', [newPriority, userId], (err) => {
+                if (err) {
+                    console.error('Error updating user priority:', err);
+                    return res.status(500).send('Error updating user priority');
+                }
+
+                res.redirect('/admin/users'); // Перенаправляем на страницу управления пользователями
+            });
+        });
+    } else {
+        // Если пользователь не аутентифицирован или у него нет приоритета 2, перенаправляем на главную страницу
+        res.redirect('/');
+    }
+});
+
+
 // Роут для отображения страницы управления заказами
 app.get('/admin/orders', isAuthenticated, (req, res) => {
     // Проверяем, аутентифицирован ли пользователь и имеет ли он приоритет
@@ -360,3 +417,4 @@ app.get('/logout', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+
