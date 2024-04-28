@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Computer Parts Store - Корзина</title>
+    <title>Корзина</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +13,7 @@
             background-color: #f4f4f4;
         }
         header {
-            background-color: #333;
+            background-color: #1286c9;
             color: #fff;
             padding: 20px 0;
             text-align: center;
@@ -27,17 +27,25 @@
         nav ul li {
             display: inline-block;
             margin-right: 20px;
+            background-color: #1286c9;
+            box-shadow: none;
+        }
+        nav ul li:hover {
+            box-shadow: none;
         }
         nav ul li a {
-            display: block;
+            background-color: #fff;
             color: #000000;
-            text-align: center;
-            padding: 14px 16px;
             text-decoration: none;
-            transition: background-color 0.3s ease;
+            padding: 14px 16px;
+            transition: background-color 0.5s ease;
+            transition: color 0.5s ease;
+            transition-property: all;
+            border-radius: 20px;
         }
         nav ul li a:hover {
             background-color: #555;
+            color: #fff;
         }
         .container {
             max-width: 800px;
@@ -70,6 +78,10 @@
             padding-top: 20px;
             border-top: 1px solid #ccc;
         }
+
+        a {
+            text-decoration: none;
+        }
         label {
             display: block;
             margin-bottom: 5px;
@@ -87,7 +99,7 @@
         .button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #26A9E0;
     color: white;
     text-align: center;
     font-size: 16px;
@@ -98,7 +110,7 @@
 }
 
 .button:hover {
-    background-color: #45a049;
+    background-color: #168abb;
 }
     </style>
 </head>
@@ -106,12 +118,12 @@
     <header>
         <nav>
             <ul>
-                <li><a href="/">Магазин</a></li>
-                <li><a href="/cart">Корзина</a></li>
+                <li><a href="/"><b>Магазин</b></a></li>
+                <li><a href="/cart"><b>Корзина</b></a></li>
                 <% if (userPriority === 2) { %>
-                    <li><a href="/admin">Админ-Панель</a></li>
+                    <li><a href="/admin"><b>Панель админа</b></a></li>
                 <% } %>
-                <li><a href="/login">Авторизация</a></li>
+                <li><a href="/login"><b>Авторизация</b></a></li>
             </ul>
         </nav>
     </header>
@@ -122,6 +134,7 @@
                 <% cart.forEach(item => { %>
                     <li>
                         <h2><%= item.name %></h2>
+                        <p>Жанр: <%= item.genre %></p>
                         <p>Продукт: <%= item.description %></p>
                         <p>Цена: <%= item.price %> руб.</p>
                         <p>Количество: <%= item.quantity %></p>

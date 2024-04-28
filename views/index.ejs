@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Computer Parts Store - Магазин</title>
+    <title>Bookshop</title>
     <style>
         header {
     position: relative;
@@ -21,10 +21,10 @@ header img {
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            color: #333;
+            color: #000;
         }
         header {
-            background-color: #333;
+            background-color: #1286c9;
             color: #fff;
             padding: 20px 0;
             text-align: center;
@@ -38,15 +38,25 @@ header img {
         nav ul li {
             display: inline-block;
             margin-right: 20px;
+            background-color: #1286c9;
+            box-shadow: none;
+        }
+        nav ul li:hover {
+            box-shadow: none;
         }
         nav ul li a {
+            background-color: #fff;
             color: #000000;
             text-decoration: none;
             padding: 14px 16px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.5s ease;
+            transition: color 0.5s ease;
+            transition-property: all;
+            border-radius: 20px;
         }
         nav ul li a:hover {
             background-color: #555;
+            color: #fff;
         }
         .container {
             max-width: 800px;
@@ -62,6 +72,7 @@ header img {
             padding: 0;
         }
         li {
+            list-style: none;
             background: #fff;
             padding: 20px;
             margin-bottom: 20px;
@@ -80,6 +91,12 @@ header img {
             padding-top: 20px;
             border-top: 1px solid #ccc;
         }
+
+        #search_form {
+            border: thick double #32a1ce;
+            padding: 10px;
+        }
+
         label {
             display: block;
             margin-bottom: 5px;
@@ -96,18 +113,29 @@ header img {
         }
         button {
             padding: 10px 20px;
-            background-color: #333;
+            background-color: #26A9E0;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 15px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #555;
+            background-color: #168abb;
+        }
+        #linkdobook {
+            text-decoration: none;
+            color: #fff;
+        }
+        #dobook {
+            padding: 20px;
+            background-color: #26A9E0;
+        }
+        #dobook:hover {
+            background-color: #168abb;
         }
         .footer {
-            background-color: #333;
+            background-color: #1286c9;
             color: #fff;
             padding: 20px 0;
             text-align: center;
@@ -137,12 +165,12 @@ header img {
         <img src="" alt="">
         <nav>
             <ul>
-                <li><a href="/">Магазин</a></li>
-                <li><a href="/cart">Корзина</a></li>
+                <li><a href="/"><b>Магазин</b></a></li>
+                <li><a href="/cart"><b>Корзина</b></a></li>
                 <% if (userPriority === 2) { %>
-                    <li><a href="/admin">Админ-Панель</a></li>
+                    <li><a href="/admin"><b>Панель Админа</b></a></li>
                 <% } %>
-                <li><a href="/login">Авторизация</a></li>
+                <li><a href="/login"><b>Авторизация</b></a></li>
             </ul>
         </nav>
     </header>
@@ -150,33 +178,53 @@ header img {
         <% if (cornerLetter === 'A') { %>
             <div style="position: fixed; top: 10px; right: 10px; font-size: 24px;">A</div>
         <% } %>
-        <h1>Добро пожаловать в магазин компьютерных комплектующих!</h1>
-        <h2>Доступные комплектующие:</h2>
+        <h1>Bookshop - Интернет-магазин книг!</h1>
+
+        <% if (userPriority === 2) { %>
+            <li><b><a id="linkdobook" href="/admin/books"><div id="dobook">Изменить данные о книгах</div></a></b></li>
+        <% } %>
+
+        <form id="search_form" method="post" action="/search">
+
+            <label for="filter"><b>Поиск книг:</b></label>
+
+            <label for="name">Введите запрос:</label>
+            <input type="text" id="search" name="search" value=""><br>
+
+            <label for="filter"><b>Фильтр по цене:</b></label>
+
+            <label for="min_price">Минимальная цена:</label>
+            <input type="number" id="min_price" name="min_price" step="1" value="0" required><br>
+
+            <label for="max_price">Максимальная цена:</label>
+            <input type="number" id="max_price" name="max_price" step="1" value="9000" required><br>
+
+            <button id="search_btn" type="submit"><b>Поиск</b></button>
+        </form>
+
+        <h2>Книги, имеющиеся в наличии:</h2>
         <ul>
-            <% products.forEach(product => { %>
+            <% books.forEach(book => { %>
                 <li>
-                    <h3><%= product.name %></h3>
-                    <p><%= product.description %></p>
-                    <p>Цена: <%= product.price %> руб.</p>
+                    <h3><%= book.name %></h3>
+                    <p><b>Жанр:</b> <%= book.genre %></p>
+                    <p><b>Описание:</b> <%= book.description %></p>
+                    <p><b>Цена:</b> <%= book.price %> руб.</p>
                     <form action="/cart" method="post">
-                    <input type="hidden" name="product_id" value="<%= product.id %>">
+                    <input type="hidden" name="book_id" value="<%= book.id %>">
                     <input type="number" name="quantity" value="1" min="1">
-                    <button type="submit">Добавить в корзину</button>
+                    <button type="submit"><b>Купить</b></button>
                     </form>
                 </li>
             <% }); %>
-            <% if (userPriority === 2) { %>
-                <li><a href="/admin/products">Взаимодействовать с продуктами</a></li>
-            <% } %>
         </ul>
+        
         <footer class="footer">
             <div class="footer-content">
-                <p>© 2024 Computer Parts Store</p>
-                <p>Наша компания занимается продажей компьютерных комплектующих.</p>
+                <p>© 2024 Bookshop</p>
+                <p>Наш магазин занимается розничной продажей книг.</p>
                 <div class="social-links">
-                    <a href="#" class="social-link">Telegram</a>
-                    <a href="#" class="social-link">VKontakte</a>
-                    <!-- Добавьте другие ссылки на социальные сети, если необходимо -->
+                    <a href="/help" class="social-link">Справка</a>
                 </div>
             </div>
         </footer>

@@ -79,6 +79,24 @@
             margin-top: 20px;
             text-align: center;
         }
+
+        #linkback {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        #back {
+            width: 170px;
+            padding: 13px;
+            border-radius: 10px;
+            background-color: #e65d0e;
+            transition: background-color 0.3s ease;
+        }
+
+        #back:hover {
+            background-color: #bc4d0d;
+        }
+
     </style>
 </head>
 <body>
@@ -103,7 +121,7 @@
             <input type="text" id="address" name="address" required><br>
             <button type="submit">Оформить заказ</button>
         </form>
-        <p><a href="/cart">Вернуться в корзину</a></p>
+        <p><b><a id="linkback" href="/cart"><div id="back">Вернуться в корзину</div></a></b></p>
     </div>
 </body>
 </html>

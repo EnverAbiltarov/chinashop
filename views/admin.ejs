@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ-Панель</title>
+    <title>Admin</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            color: #333;
+            color: #000;
         }
         header {
-            background-color: #333;
+            background-color: #1286c9;
             color: #fff;
             padding: 20px 0;
             text-align: center;
@@ -27,11 +27,14 @@
         nav ul li {
             display: inline-block;
             margin-right: 20px;
+            padding: 14px 16px;
+            background-color: #1286c9;
         }
         nav ul li a {
             color: #f9f6f6;
             text-decoration: none;
             padding: 14px 16px;
+            border-radius: 20px;
             transition: background-color 0.3s ease;
         }
         nav ul li a:hover {
@@ -67,7 +70,7 @@
         }
         button {
             padding: 10px 20px;
-            background-color: #333;
+            background-color: #1286c9;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -78,7 +81,7 @@
             background-color: #555;
         }
         .footer {
-            background-color: #333;
+            background-color: #1286c9;
             color: #fff;
             padding: 20px 0;
             text-align: center;
@@ -110,26 +113,25 @@
     <header>
         <nav>
             <ul>
-                <li><a href="/">Магазин</a></li>
-                <li><a href="/admin/products">Управление продуктами</a></li>
-                <li><a href="/admin/orders">Управление заказами</a></li>
-                <li><a href="/admin/users">Управление пользователями</a></li>
-                <li><a href="/logout">Выход</a></li>
+                <li><a href="/"><b>Магазин</b></a></li>
+                <li><a href="/admin/books"><b>Управление товаром</b></a></li>
+                <li><a href="/admin/orders"><b>Управление заказами</b></a></li>
+                <li><a href="/admin/employees"><b>Управление сотрудниками</b></a></li>
+                <li><a href="/admin/users"><b>Управление пользователями</b></a></li>
+                <li><a href="/logout"><b>Выход</b></a></li>
             </ul>
         </nav>
     </header>
     <div class="container">
-        <h1>Добро пожаловать в админ-панель!</h1>
+        <h1>Панель админа</h1>
         <!-- Здесь можно добавить дополнительный контент для администратора -->
     </div>
     <footer class="footer">
         <div class="footer-content">
-            <p>© 2024 Computer Parts Store</p>
-            <p>Наша компания занимается продажей компьютерных комплектующих.</p>
+            <p>© 2024 Bookshop</p>
+            <p>Наш магазин занимается розничной продажей книг.</p>
             <div class="social-links">
-                <a href="#" class="social-link">Telegram</a>
-                <a href="#" class="social-link">VKontakte</a>
-                <!-- Добавьте другие ссылки на социальные сети, если необходимо -->
+                <a href="/help" class="social-link">Справка</a>
             </div>
         </div>
     </footer>

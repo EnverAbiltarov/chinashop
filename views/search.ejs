@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshop</title>
+    <style>
+        header {
+    position: relative;
+}
+
+header img {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 50px; /* Размеры вашего логотипа */
+    width: auto;
+}
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #000;
+        }
+        header {
+            background-color: #1286c9;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+            background-color: #1286c9;
+            box-shadow: none;
+        }
+        nav ul li:hover {
+            box-shadow: none;
+        }
+        nav ul li a {
+            background-color: #fff;
+            color: #000000;
+            text-decoration: none;
+            padding: 14px 16px;
+            transition: background-color 0.5s ease;
+            transition: color 0.5s ease;
+            transition-property: all;
+            border-radius: 20px;
+        }
+        nav ul li a:hover {
+            background-color: #555;
+            color: #fff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            list-style: none;
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        li:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        li h2 {
+            margin-top: 0;
+        }
+        form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        textarea,
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #26A9E0;
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #168abb;
+        }
+        #linkdobook {
+            text-decoration: none;
+            color: #fff;
+        }
+        #dobook {
+            padding: 20px;
+            background-color: #26A9E0;
+        }
+        #dobook:hover {
+            background-color: #168abb;
+        }
+        .footer {
+            background-color: #1286c9;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .social-links {
+            margin-top: 10px;
+        }
+        .social-link {
+            display: inline-block;
+            margin-right: 10px;
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .social-link:hover {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="" alt="">
+        <nav>
+            <ul>
+                <li><a href="/"><b>Магазин</b></a></li>
+                <li><a href="/cart"><b>Корзина</b></a></li>
+                <% if (userPriority === 2) { %>
+                    <li><a href="/admin"><b>Панель админа</b></a></li>
+                <% } %>
+                <li><a href="/login"><b>Авторизация</b></a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <% if (cornerLetter === 'A') { %>
+            <div style="position: fixed; top: 10px; right: 10px; font-size: 24px;">A</div>
+        <% } %>
+        <% if (userPriority === 2) { %>
+            <li><b><a id="linkdobook" href="/admin/books"><div id="dobook">Изменить данные о книгах</div></a></b></li>
+        <% } %>
+
+        <h2>Книги по запросу:</h2>
+        <ul>
+            <% books.forEach(book => { %>
+                <li>
+                    <h3><%= book.name %></h3>
+                    <p><b>Жанр:</b> <%= book.genre %></p>
+                    <p><b>Описание:</b> <%= book.description %></p>
+                    <p><b>Цена:</b> <%= book.price %> руб.</p>
+                    <form action="/cart" method="post">
+                    <input type="hidden" name="book_id" value="<%= book.id %>">
+                    <input type="number" name="quantity" value="1" min="1">
+                    <button type="submit"><b>Купить</b></button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+</body>
+</html>

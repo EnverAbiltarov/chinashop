@@ -32,6 +32,7 @@
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 8px;
+            border: 2px dashed black;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -58,37 +59,39 @@
     </style>
 </head>
 <body>
-    <h1>Admin Orders</h1>
+    <h1>Заказы</h1>
 
     <ul>
         <% orders.forEach(order => { %>
             <li>
+                <h1>Заказ <%= order.id %></h1>
                 <div class="order-info">
-                    <strong>Order ID:</strong> <%= order.id %><br>
-                    <strong>User ID:</strong> <%= order.user_id %><br>
-                    <strong>Total Amount:</strong> $<%= order.total_price %><br>
-                    <strong>Order Date:</strong> <%= order.order_date %><br>
-                    <strong>Name:</strong> <%= order.name %><br>
-                    <strong>Address:</strong> <%= order.address %><br>
+                    <strong>ID заказа:</strong> <%= order.id %><br>
+                    <strong>ID пользователя:</strong> <%= order.user_id %><br>
+                    <!--<strong>Total Amount:</strong> ₽<%= order.total_price %><br>-->
+                    <strong>Дата заказа:</strong> <%= order.order_date %><br>
+                    <strong>Имя заказчика:</strong> <%= order.name %><br>
+                    <strong>Адрес доставки:</strong> <%= order.address %><br>
                 </div>
-                <h2>Order Items</h2>
+                <h2>Заказанные книги</h2>
                 <% if (order.items && order.items.length > 0) { %>
                     <ul class="order-items">
                         <% order.items.forEach(item => { %>
                             <li>
-                                <strong>Product Name:</strong> <%= item.name %><br>
-                                <strong>Quantity:</strong> <%= item.quantity %><br>
-                                <strong>Price per Unit:</strong> $<%= item.price %>
+                                <strong>Название книги:</strong> <%= item.name %><br>
+                                <strong>Количество:</strong> <%= item.quantity %><br>
+                                <strong>Цена за 1 книгу:</strong> ₽ <%= item.price %><br>
+                                <strong>Стоимость:</strong> ₽ <%= item.sum %>
                             </li>
                         <% }); %>
                     </ul>
                 <% } else { %>
-                    <p>No items found for this order.</p>
+                    <p>Нет заказов.</p>
                 <% } %>
             </li>
         <% }); %>
     </ul>
 
-    <a href="/admin" class="back-btn">Back to Admin Panel</a>
+    <a href="/admin" class="back-btn">Вернуться на главную страницу админ-панели</a>
 </body>
 </html>

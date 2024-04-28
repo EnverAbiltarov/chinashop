@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Computer Parts Store - Авторизация</title>
+    <title>Авторизация</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,6 +29,7 @@
             margin-bottom: 20px;
         }
         form {
+            margin-top: 20px;
             text-align: center;
         }
         label {
@@ -53,6 +54,9 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+        }
+        #choose {
+            margin-bottom: 10px;
         }
         button:hover {
             background-color: #555;
@@ -89,7 +93,7 @@
             <label for="password">Пароль:</label>
             <input type="password" id="password" name="password" required><br>
             <label for="priority">Приоритет (1 - обычный, 2 - админ):</label>
-            <input type="number" id="priority" name="priority" min="1" max="2" value="1" required><br> <!-- Добавляем поле для указания приоритета -->
+            <input id="choose" type="number" id="priority" name="priority" min="1" max="2" value="1" required><br> <!-- Добавляем поле для указания приоритета -->
             <button type="submit">Войти</button>
         </form>
         <a href="/" class="return-link">Выход на главный экран</a>

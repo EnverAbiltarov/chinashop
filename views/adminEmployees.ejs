@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Employees</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        li:hover {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            margin-top: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], textarea, input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #26A9E0;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #168abb;
+        }
+
+        #add {
+            background-color: #4CAF50;
+        }
+
+        #add:hover {
+            background-color: #45a049;
+        }
+
+        #del {
+            background-color: #cf1d0c;
+        }
+
+        #del:hover {
+            background-color: #b0180b;
+        }
+
+        .back-btn {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            color: #45a049;
+        }
+
+        .book-form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Админ-Панель</h1>
+    <% if (cornerLetter === 'A') { %>
+        <div style="position: fixed; top: 10px; right: 10px; font-size: 24px;">A</div>
+    <% } %>
+    <div class="book-form">
+        <h2>Добавить нового сотрудника:</h2>
+        <form method="post" action="/addEmploy">
+            <label for="name">ФИО:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="address">Адрес проживания:</label>
+            <input type="text" id="address" name="address" required><br>
+
+            <label for="birthday">Дата рождения:</label>
+            <input type="text" id="birthday" name="birthday" required><br>
+
+            <label for="phone">Номер телефона:</label>
+            <input type="text" id="phone" name="phone" required><br>
+            
+            <label for="salary">Зарплата:</label>
+            <input type="number" id="salary" name="salary" step="100" required><br>
+
+            <button id="addEmploy" type="submit">Добавить</button>
+        </form>
+    </div>
+    
+    <h2>Список сотрудников магазина</h2>
+    <ul>
+        <% employees.forEach(employ => { %>
+            <li>
+                <strong><%= employ.name %></strong> - <%= employ.salary %> руб
+                <div class="book-form">
+                    <form action="/admin/employees/update/<%= employ.id %>" method="POST">
+                        <label for="name">ФИО:</label>
+                        <input type="text" id="name" name="name" value="<%= employ.name %>">
+
+                        <label for="address">Адрес проживания:</label>
+                        <input type="text" id="address" name="address" value="<%= employ.address %>">
+
+                        <label for="birthday">Дата рождения:</label>
+                        <input type="text" id="birthday" name="birthday" value="<%= employ.birthday %>">
+
+                        <label for="phone">Номер телефона:</label>
+                        <input type="text" id="phone" name="phone" value="<%= employ.phone %>">
+
+                        <label for="salary">Зарплата:</label>
+                        <input type="text" id="salary" name="salary" value="<%= employ.salary %>">
+
+                        <button type="submit">Изменить данные</button>
+                    </form>
+                    <form action="/admin/employees/delete/<%= employ.id %>" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button id="del" type="submit">Уволить</button>
+                    </form>
+                </div>
+            </li>
+        <% }); %>
+    </ul>
+
+    <a href="/admin" class="back-btn">Вернуться на главную страницу админ-панели</a>
+</body>
+</html>
