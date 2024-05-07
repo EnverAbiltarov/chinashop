@@ -19,18 +19,18 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'bookshop'
+    database: 'chinashop'
 });
 
 // Добавление книги
 app.post('/add', (req, res) => {
-    const { name, genre, description, price } = req.body;
-    db.query('INSERT INTO books (name, genre, description, price) VALUES (?, ?, ?, ?)', [name, genre, description, price], (err) => {
+    const { name, collection, description, price } = req.body;
+    db.query('INSERT INTO dishes (name, collection, description, price) VALUES (?, ?, ?, ?)', [name, collection, description, price], (err) => {
         if (err) {
-            console.error('Error adding book:', err);
-            return res.status(500).send('Error adding book');
+            console.error('Error adding dish:', err);
+            return res.status(500).send('Error adding dish');
         }
-        res.redirect('/admin/books'); // После успешного добавления продукта перезагружаем страницу
+        res.redirect('/admin/dishes'); // После успешного добавления продукта перезагружаем страницу
     });
 });
 
@@ -56,12 +56,12 @@ const isAuthenticated = (req, res, next) => {
 
 // Главная страница - Магазин
 app.get('/',  (req, res) => {
-    db.query('SELECT * FROM books', (err, results) => {
+    db.query('SELECT * FROM dishes', (err, results) => {
         if (err) {
-            console.error('Error fetching books:', err);
-            return res.status(500).send('Error fetching books');
+            console.error('Error fetching dishes:', err);
+            return res.status(500).send('Error fetching dishes');
         }
-        const books = results; // Полученные продукты из базы данных
+        const dishes = results; // Полученные продукты из базы данных
 
         // Получаем идентификатор пользователя из сессии
         const userId = req.session.userId;
@@ -83,7 +83,7 @@ app.get('/',  (req, res) => {
             }
 
             // Передаем продукты, букву и приоритет пользователя в шаблон
-            res.render('index', { books, cornerLetter, userPriority });
+            res.render('index', { dishes, cornerLetter, userPriority });
         });
     });
 });
@@ -93,13 +93,13 @@ app.post('/search',  (req, res) => {
     const search = '%' + req.body.search + '%'
     const min_price = req.body.min_price
     const max_price = req.body.max_price
-    db.query('SELECT * FROM books WHERE (name LIKE ? or genre LIKE ? or description LIKE ?) and price >= ? and price <= ?', 
+    db.query('SELECT * FROM dishes WHERE (name LIKE ? or collection LIKE ? or description LIKE ?) and price >= ? and price <= ?', 
     [search, search, search, min_price, max_price], (err, results) => {
         if (err) {
-            console.error('Error fetching books:', err);
-            return res.status(500).send('Error fetching books');
+            console.error('Error fetching dishes:', err);
+            return res.status(500).send('Error fetching dishes');
         }
-        const books = results; // Полученные продукты из базы данных
+        const dishes = results; // Полученные продукты из базы данных
 
         // Получаем идентификатор пользователя из сессии
         const userId = req.session.userId;
@@ -121,10 +121,12 @@ app.post('/search',  (req, res) => {
             }
 
             // Передаем продукты, букву и приоритет пользователя в шаблон
-            res.render('search', { books, cornerLetter, userPriority });
+            res.render('search', { dishes, cornerLetter, userPriority });
         });
     });
 });
+
+let totalCartPrice = 0;
 
 // Обработка GET запроса на страницу корзины
 app.get('/cart', isAuthenticated, (req, res) => {
@@ -134,10 +136,10 @@ app.get('/cart', isAuthenticated, (req, res) => {
     // Получаем приоритет пользователя из сессии
     const userPriority = req.session.userPriority || 0;
 
-    // Проверяем, что cart не пустой и содержит объекты с book_id
-    if (cart.length > 0 && cart.every(item => item && item.book_id)) {
+    // Проверяем, что cart не пустой и содержит объекты с dish_id
+    if (cart.length > 0 && cart.every(item => item && item.dish_id)) {
         const placeholders = cart.map(() => '?').join(',');
-        db.query(`SELECT id, name, genre, description, price FROM books WHERE id IN (${placeholders})`, cart.map(item => item.book_id), (err, results) => {
+        db.query(`SELECT id, name, collection, description, price FROM dishes WHERE id IN (${placeholders})`, cart.map(item => item.dish_id), (err, results) => {
             if (err) {
                 console.error('Error fetching cart items:', err);
                 return res.status(500).send('Error fetching cart items');
@@ -147,19 +149,20 @@ app.get('/cart', isAuthenticated, (req, res) => {
             const cartItems = [];
 
             // Создаем объект для каждого товара в корзине с дополнительной информацией о количестве
-            results.forEach((book, index) => {
+            results.forEach((dish, index) => {
                 const quantity = cart[index].quantity;
                 cartItems.push({
-                    id: book.id,
-                    name: book.name,
-                    description: book.description,
-                    price: book.price,
+                    id: dish.id,
+                    name: dish.name,
+                    collection: dish.collection,
+                    description: dish.description,
+                    price: dish.price,
                     quantity
                 });
             });
 
             // Вычисляем общую стоимость товаров в корзине
-            const totalCartPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+            totalCartPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
             // Отображаем страницу корзины с информацией о товарах, общей стоимостью и приоритетом пользователя
             res.render('cart', { cart: cartItems, totalCartPrice, isAuthenticated: req.session.authenticated, userPriority });
@@ -172,22 +175,22 @@ app.get('/cart', isAuthenticated, (req, res) => {
 
 // Обработка добавления в корзину
 app.post('/cart', (req, res) => {
-    const { book_id, quantity } = req.body;
+    const { dish_id, quantity } = req.body;
     
     // Добавляем выбранный продукт в сессию корзины
     req.session.cart = req.session.cart || []; // Создаем корзину, если она еще не существует
-    req.session.cart.push({ book_id, quantity }); // Добавляем товар в корзину
+    req.session.cart.push({ dish_id, quantity }); // Добавляем товар в корзину
 
     res.redirect('/'); // Перенаправляем пользователя на главную страницу после добавления товара в корзину
 });
 
 // Удаление товара из корзины
 app.post('/cart/remove', (req, res) => {
-    const bookIdToRemove = req.body.book_id;
+    const dishIdToRemove = req.body.dish_id;
     const cart = req.session.cart || [];
 
     // Фильтруем товары в корзине, оставляя только те, которые необходимо удалить
-    req.session.cart = cart.filter(item => item.book_id !== bookIdToRemove);
+    req.session.cart = cart.filter(item => item.dish_id !== dishIdToRemove);
 
     res.redirect('/cart'); // Перенаправляем пользователя на страницу корзины после удаления товара
 });
@@ -206,8 +209,8 @@ app.post('/order', isAuthenticated, (req, res) => {
     const cart = req.session.cart || [];
 
     // Создание нового заказа в таблице orders
-    db.query('INSERT INTO orders (user_id, order_date, name, address) VALUES (?, ?, ?, ?)',
-        [userId, orderDate, name, address], (err, result) => {
+    db.query('INSERT INTO orders (user_id, order_date, total_price, name, address) VALUES (?, ?, ?, ?, ?)',
+        [userId, orderDate, totalCartPrice, name, address], (err, result) => {
             if (err) {
                 console.error('Error creating order:', err);
                 return res.status(500).send('Error creating order');
@@ -218,8 +221,8 @@ app.post('/order', isAuthenticated, (req, res) => {
             // Добавление каждого товара из корзины в таблицу order_items
             const promises = cart.map(item => {
                 return new Promise((resolve, reject) => {
-                    db.query('INSERT INTO order_books (order_id, book_id, quantity) VALUES (?, ?, ?)',
-                        [orderId, item.book_id, item.quantity], (err) => {
+                    db.query('INSERT INTO order_dishes (order_id, dish_id, quantity) VALUES (?, ?, ?)',
+                        [orderId, item.dish_id, item.quantity], (err) => {
                             if (err) {
                                 reject(err);
                             } else {
@@ -261,19 +264,19 @@ app.get('/admin', isAuthenticated, (req, res) => {
 });
 
 // Роут для отображения страницы управления книгами
-app.get('/admin/books', isAuthenticated, (req, res) => {
+app.get('/admin/dishes', isAuthenticated, (req, res) => {
     // Проверяем, аутентифицирован ли пользователь и имеет ли он приоритет 2
     if (req.session.authenticated && req.session.userPriority === 2) {
         // Если аутентификация пройдена и пользователь имеет приоритет 2, отображаем страницу управления продуктами
-        db.query('SELECT * FROM books', (err, results) => {
+        db.query('SELECT * FROM dishes', (err, results) => {
             if (err) {
-                console.error('Error fetching books:', err);
-                return res.status(500).send('Error fetching books');
+                console.error('Error fetching dishes:', err);
+                return res.status(500).send('Error fetching dishes');
             }
-            const books = results;
+            const dishes = results;
             // Добавляем переменную cornerLetter, которая будет передаваться в шаблон
             const cornerLetter = 'A'; // Пример значения для cornerLetter
-            res.render('adminBooks', { books, cornerLetter });
+            res.render('adminDishes', { dishes, cornerLetter });
         });
     } else {
         // Если пользователь не аутентифицирован или у него нет приоритета 2, перенаправляем на главную страницу
@@ -303,19 +306,19 @@ app.get('/admin/employees', isAuthenticated, (req, res) => {
 });
 
 // Роут для обновления информации о книге
-app.post('/admin/books/update/:bookId', isAuthenticated, (req, res) => {
-    const { name, genre, description, price } = req.body;
-    const bookId = req.params.bookId;
+app.post('/admin/dishes/update/:dishId', isAuthenticated, (req, res) => {
+    const { name, collection, description, price } = req.body;
+    const dishId = req.params.dishId;
     
     // Проверяем, аутентифицирован ли пользователь и имеет ли он приоритет 2
     if (req.session.authenticated && req.session.userPriority === 2) {
         // Если аутентификация пройдена и пользователь имеет приоритет 2, обновляем информацию о продукте
-        db.query('UPDATE books SET name = ?, genre = ?, description = ?, price = ? WHERE id = ?', [name, genre, description, price, bookId], (err) => {
+        db.query('UPDATE dishes SET name = ?, collection = ?, description = ?, price = ? WHERE id = ?', [name, collection, description, price, dishId], (err) => {
             if (err) {
-                console.error('Error updating book:', err);
-                return res.status(500).send('Error updating book');
+                console.error('Error updating dish:', err);
+                return res.status(500).send('Error updating dish');
             }
-            res.redirect('/admin/books');
+            res.redirect('/admin/dishes');
         });
     } else {
         // Если пользователь не аутентифицирован или у него нет приоритета 2, перенаправляем на главную страницу
@@ -344,18 +347,18 @@ app.post('/admin/employees/update/:employId', isAuthenticated, (req, res) => {
 });
 
 // Роут для удаления книги
-app.post('/admin/books/delete/:bookId', isAuthenticated, (req, res) => {
-    const bookId = req.params.bookId;
+app.post('/admin/dishes/delete/:dishId', isAuthenticated, (req, res) => {
+    const dishId = req.params.dishId;
     
     // Проверяем, аутентифицирован ли пользователь и имеет ли он приоритет 2
     if (req.session.authenticated && req.session.userPriority === 2) {
         // Если аутентификация пройдена и пользователь имеет приоритет 2, удаляем продукт
-        db.query('DELETE FROM books WHERE id = ?', [bookId], (err) => {
+        db.query('DELETE FROM dishes WHERE id = ?', [dishId], (err) => {
             if (err) {
-                console.error('Error deleting book:', err);
-                return res.status(500).send('Error deleting book');
+                console.error('Error deleting dish:', err);
+                return res.status(500).send('Error deleting dish');
             }
-            res.redirect('/admin/books');
+            res.redirect('/admin/dishes');
         });
     } else {
         // Если пользователь не аутентифицирован или у него нет приоритета 2, перенаправляем на главную страницу
@@ -453,7 +456,7 @@ app.get('/admin/orders', isAuthenticated, (req, res) => {
             const promises = orders.map(order => {
                 return new Promise((resolve, reject) => {
                     // Запрос к базе данных для получения информации о продуктах в заказе, включая количество
-                    db.query('SELECT books.name, books.genre, books.description, books.price, order_books.quantity, (books.price*order_books.quantity) AS sum FROM books INNER JOIN order_books ON books.id = order_books.book_id WHERE order_books.order_id = ?', [order.id], (err, items) => {
+                    db.query('SELECT dishes.name, dishes.collection, dishes.description, dishes.price, order_dishes.quantity, (dishes.price*order_dishes.quantity) AS sum FROM dishes INNER JOIN order_dishes ON dishes.id = order_dishes.dish_id WHERE order_dishes.order_id = ?', [order.id], (err, items) => {
                         if (err) {
                             reject(err);
                         } else {

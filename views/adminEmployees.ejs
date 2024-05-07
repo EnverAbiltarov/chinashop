@@ -7,18 +7,19 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            font-weight: bold;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #C05FA2;
         }
 
         h1 {
-            color: #333;
+            color: #ffffff;
             text-align: center;
         }
 
         h2 {
-            color: #555;
+            color: #ffffff;
             margin-top: 30px;
         }
 
@@ -28,7 +29,8 @@
         }
 
         li {
-            background-color: #fff;
+            background: #490085;
+            color: #fff;
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 8px;
@@ -72,12 +74,12 @@
             background-color: #168abb;
         }
 
-        #add {
-            background-color: #4CAF50;
+        #addEmploy {
+            background-color: #e02673;
         }
 
-        #add:hover {
-            background-color: #45a049;
+        #addEmploy:hover {
+            background-color: #c01e6a;
         }
 
         #del {
@@ -93,16 +95,17 @@
             margin-top: 20px;
             text-align: center;
             text-decoration: none;
-            color: #000000;
+            color: #ffffff;
             font-weight: bold;
         }
 
         .back-btn:hover {
-            color: #45a049;
+            color: #eeff00;
         }
 
-        .book-form {
-            background-color: #f9f9f9;
+        .employ-form {
+            background: #490085;
+            color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -115,7 +118,7 @@
     <% if (cornerLetter === 'A') { %>
         <div style="position: fixed; top: 10px; right: 10px; font-size: 24px;">A</div>
     <% } %>
-    <div class="book-form">
+    <div class="employ-form">
         <h2>Добавить нового сотрудника:</h2>
         <form method="post" action="/addEmploy">
             <label for="name">ФИО:</label>

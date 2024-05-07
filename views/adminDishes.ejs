@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Books</title>
+    <title>Admin Dishes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            font-weight: bold;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #C05FA2;
         }
 
         h1 {
-            color: #333;
+            color: #ffffff;
             text-align: center;
         }
 
         h2 {
-            color: #555;
+            color: #ffffff;
             margin-top: 30px;
         }
 
@@ -28,7 +29,8 @@
         }
 
         li {
-            background-color: #fff;
+            background: #490085;
+            color: #fff;
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 8px;
@@ -73,11 +75,11 @@
         }
 
         #add {
-            background-color: #4CAF50;
+            background-color: #e02673;
         }
 
         #add:hover {
-            background-color: #45a049;
+            background-color: #c01e6a;
         }
 
         #del {
@@ -93,16 +95,17 @@
             margin-top: 20px;
             text-align: center;
             text-decoration: none;
-            color: #000000;
+            color: #ffffff;
             font-weight: bold;
         }
 
         .back-btn:hover {
-            color: #45a049;
+            color: #eeff00;
         }
 
-        .book-form {
-            background-color: #f9f9f9;
+        .dish-form {
+            background: #490085;
+            color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -115,14 +118,14 @@
     <% if (cornerLetter === 'A') { %>
         <div style="position: fixed; top: 10px; right: 10px; font-size: 24px;">A</div>
     <% } %>
-    <div class="book-form">
-        <h2>Добавить новую книгу:</h2>
+    <div class="dish-form">
+        <h2>Добавить новый товар:</h2>
         <form method="post" action="/add">
             <label for="name">Название:</label>
             <input type="text" id="name" name="name" required><br>
 
-            <label for="genre">Жанр:</label>
-            <input type="text" id="genre" name="genre" required><br>
+            <label for="genre">Коллекция:</label>
+            <input type="text" id="collection" name="collection" required><br>
 
             <label for="description">Описание:</label>
             <textarea id="description" name="description" required></textarea><br>
@@ -133,28 +136,28 @@
         </form>
     </div>
     
-    <h2>Список книг</h2>
+    <h2>Список товара</h2>
     <ul>
-        <% books.forEach(book => { %>
+        <% dishes.forEach(dish => { %>
             <li>
-                <strong><%= book.name %></strong>: <%= book.description %> - <%= book.price %>
-                <div class="book-form">
-                    <form action="/admin/books/update/<%= book.id %>" method="POST">
+                <strong><%= dish.name %></strong>: <%= dish.description %> - <%= dish.price %>
+                <div class="dish-form">
+                    <form action="/admin/dishes/update/<%= dish.id %>" method="POST">
                         <label for="name">Название:</label>
-                        <input type="text" id="name" name="name" value="<%= book.name %>">
+                        <input type="text" id="name" name="name" value="<%= dish.name %>">
 
-                        <label for="genre">Жанр:</label>
-                        <input type="text" id="genre" name="genre" value="<%= book.genre %>">
+                        <label for="genre">Коллекция:</label>
+                        <input type="text" id="collection" name="collection" value="<%= dish.collection %>">
 
                         <label for="description">Описание:</label>
-                        <input type="text" id="description" name="description" value="<%= book.description %>">
+                        <input type="text" id="description" name="description" value="<%= dish.description %>">
 
                         <label for="price">Цена:</label>
-                        <input type="text" id="price" name="price" value="<%= book.price %>">
+                        <input type="text" id="price" name="price" value="<%= dish.price %>">
 
                         <button type="submit">Изменить</button>
                     </form>
-                    <form action="/admin/books/delete/<%= book.id %>" method="post">
+                    <form action="/admin/dishes/delete/<%= dish.id %>" method="post">
                         <input type="hidden" name="_method" value="DELETE">
                         <button id="del" type="submit">Удалить</button>
                     </form>

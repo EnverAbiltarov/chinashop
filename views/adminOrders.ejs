@@ -9,16 +9,18 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #C05FA2;
+            color: #fff;
+            font-weight: bold;
         }
 
         h1 {
-            color: #333;
+            color: #ffffff;
             text-align: center;
         }
 
         h2 {
-            color: #555;
+            color: #ffffff;
             margin-top: 30px;
         }
 
@@ -28,11 +30,11 @@
         }
 
         li {
-            background-color: #fff;
+            background-color: #490085;
             padding: 15px;
             margin-bottom: 20px;
-            border-radius: 8px;
-            border: 2px dashed black;
+            border-radius: 40px;
+            border: 2px dashed rgb(255, 255, 255);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -49,12 +51,12 @@
             margin-top: 20px;
             text-align: center;
             text-decoration: none;
-            color: #000000;
+            color: #ffffff;
             font-weight: bold;
         }
 
         .back-btn:hover {
-            color: #45a049;
+            color: #eeff00;
         }
     </style>
 </head>
@@ -68,19 +70,19 @@
                 <div class="order-info">
                     <strong>ID заказа:</strong> <%= order.id %><br>
                     <strong>ID пользователя:</strong> <%= order.user_id %><br>
-                    <!--<strong>Total Amount:</strong> ₽<%= order.total_price %><br>-->
+                    <strong>Общая стоимость:</strong> ₽ <%= order.total_price %><br>
                     <strong>Дата заказа:</strong> <%= order.order_date %><br>
                     <strong>Имя заказчика:</strong> <%= order.name %><br>
                     <strong>Адрес доставки:</strong> <%= order.address %><br>
                 </div>
-                <h2>Заказанные книги</h2>
+                <h2>Заказанный товар</h2>
                 <% if (order.items && order.items.length > 0) { %>
                     <ul class="order-items">
                         <% order.items.forEach(item => { %>
                             <li>
-                                <strong>Название книги:</strong> <%= item.name %><br>
+                                <strong>Название товара:</strong> <%= item.name %><br>
                                 <strong>Количество:</strong> <%= item.quantity %><br>
-                                <strong>Цена за 1 книгу:</strong> ₽ <%= item.price %><br>
+                                <strong>Цена за единицу товара:</strong> ₽ <%= item.price %><br>
                                 <strong>Стоимость:</strong> ₽ <%= item.sum %>
                             </li>
                         <% }); %>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshop</title>
+    <title>Chinashop</title>
     <style>
         header {
     position: relative;
@@ -20,11 +20,11 @@ header img {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #000;
+            background-color: #C05FA2;
+            color: #ffffff;
         }
         header {
-            background-color: #1286c9;
+            background-color: #490085;
             color: #fff;
             padding: 20px 0;
             text-align: center;
@@ -38,7 +38,7 @@ header img {
         nav ul li {
             display: inline-block;
             margin-right: 20px;
-            background-color: #1286c9;
+            background-color: #490085;
             box-shadow: none;
         }
         nav ul li:hover {
@@ -55,7 +55,7 @@ header img {
             border-radius: 20px;
         }
         nav ul li a:hover {
-            background-color: #555;
+            background-color: #e02673;
             color: #fff;
         }
         .container {
@@ -73,13 +73,19 @@ header img {
         }
         li {
             list-style: none;
-            background: #fff;
+            background: #490085;
+            color: #fff;
             padding: 20px;
             margin-bottom: 20px;
-            border-radius: 5px;
+            border-radius: 40px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s ease;
         }
+
+        #item {
+            border: 2px dashed #fff;
+        }
+
         li:hover {
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
@@ -93,7 +99,8 @@ header img {
         }
 
         #search_form {
-            border: thick double #32a1ce;
+            background-color: #741cbb;
+            border: thick double #490085;
             padding: 10px;
         }
 
@@ -113,7 +120,7 @@ header img {
         }
         button {
             padding: 10px 20px;
-            background-color: #26A9E0;
+            background-color: #e02673;
             color: #fff;
             border: none;
             border-radius: 15px;
@@ -121,21 +128,18 @@ header img {
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #168abb;
+            background-color: #c01e6a;
         }
-        #linkdobook {
+        #linkdodish {
             text-decoration: none;
             color: #fff;
         }
-        #dobook {
+        #dodish {
             padding: 20px;
-            background-color: #26A9E0;
-        }
-        #dobook:hover {
-            background-color: #168abb;
+            background-color: #490085;
         }
         .footer {
-            background-color: #1286c9;
+            background-color: #490085;
             color: #fff;
             padding: 20px 0;
             text-align: center;
@@ -178,15 +182,15 @@ header img {
         <% if (cornerLetter === 'A') { %>
             <div style="position: fixed; top: 10px; right: 10px; font-size: 24px;">A</div>
         <% } %>
-        <h1>Bookshop - Интернет-магазин книг!</h1>
+        <h1>Chinashop - Интернет-магазин посуды!</h1>
 
         <% if (userPriority === 2) { %>
-            <li><b><a id="linkdobook" href="/admin/books"><div id="dobook">Изменить данные о книгах</div></a></b></li>
+            <li><b><a id="linkdodish" href="/admin/dishes"><div id="dodish">Изменить данные о товарах</div></a></b></li>
         <% } %>
 
         <form id="search_form" method="post" action="/search">
 
-            <label for="filter"><b>Поиск книг:</b></label>
+            <label for="filter"><b>Поиск:</b></label>
 
             <label for="name">Введите запрос:</label>
             <input type="text" id="search" name="search" value=""><br>
@@ -202,16 +206,16 @@ header img {
             <button id="search_btn" type="submit"><b>Поиск</b></button>
         </form>
 
-        <h2>Книги, имеющиеся в наличии:</h2>
+        <h2>Хиты продаж:</h2>
         <ul>
-            <% books.forEach(book => { %>
-                <li>
-                    <h3><%= book.name %></h3>
-                    <p><b>Жанр:</b> <%= book.genre %></p>
-                    <p><b>Описание:</b> <%= book.description %></p>
-                    <p><b>Цена:</b> <%= book.price %> руб.</p>
+            <% dishes.forEach(dish => { %>
+                <li id="item">
+                    <h3><%= dish.name %></h3>
+                    <p><b>Коллекция:</b> <%= dish.collection %></p>
+                    <p><b>Описание:</b> <%= dish.description %></p>
+                    <p><b>Цена:</b> <%= dish.price %> руб.</p>
                     <form action="/cart" method="post">
-                    <input type="hidden" name="book_id" value="<%= book.id %>">
+                    <input type="hidden" name="dish_id" value="<%= dish.id %>">
                     <input type="number" name="quantity" value="1" min="1">
                     <button type="submit"><b>Купить</b></button>
                     </form>
@@ -221,8 +225,8 @@ header img {
         
         <footer class="footer">
             <div class="footer-content">
-                <p>© 2024 Bookshop</p>
-                <p>Наш магазин занимается розничной продажей книг.</p>
+                <p>© 2024 Chinashop</p>
+                <p>Наш магазин занимается розничной продажей посуды.</p>
                 <div class="social-links">
                     <a href="/help" class="social-link">Справка</a>
                 </div>
